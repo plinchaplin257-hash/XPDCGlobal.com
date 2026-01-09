@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Mine</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{box-sizing:border-box;font-family:Arial;margin:0;padding:0;}
+body{
+    background:url('bg.jpg') center/cover no-repeat fixed;
+    color:#fff;
+}
+.overlay{
+    min-height:100vh;
+    background:linear-gradient(rgba(0,0,0,.65),rgba(5,10,58,.9));
+    display:flex;
+    justify-content:center;
+}
+.app{width:100%; max-width:430px; padding-bottom:90px;}
+.header{background:#000;padding:15px;text-align:center;font-weight:bold;font-size:20px;}
+.profile-card{margin:15px;background:#0A2BFF;border-radius:20px;padding:15px; display:flex; flex-direction:column; gap:10px;}
+.avatar-preview{width:80px; height:80px; background:#888; border-radius:50%; display:flex; align-items:center; justify-content:center; overflow:hidden; margin:auto;}
+.profile-card input{padding:8px; border-radius:10px; border:none; font-weight:bold; background:rgba(255,255,255,0.1); color:#fff;}
+.profile-card button{padding:10px; border-radius:15px; border:none; font-weight:bold; background:#fff; color:#000; cursor:pointer;}
+.message{text-align:center; margin-top:10px; color:#0f0;}
+/* BOTTOM NAV (KONSISTEN) */
+.bottom-nav{
+    position:fixed; bottom:0; left:0; width:100%; display:flex; background:#000; z-index:10;
+}
+.bottom-nav div{
+    flex:1; text-align:center; padding:14px; font-weight:bold; cursor:pointer;
+    background:#000; transition: background 0.2s;
+}
+.bottom-nav div.active{background:#1A237E;}
+.bottom-nav div:hover{background:#111;}
+</style>
+</head>
+<body>
+<div class="overlay">
+<div class="app">
+
+<div class="header">MINE</div>
+
+<div class="profile-card">
+    <div class="avatar-preview" id="avatarPreview">Avatar</div>
+    <input type="file" id="avatarInput" accept="image/*">
+    <input type="text" id="emailInput" placeholder="Email/No.Hp">
+    <input type="text" id="accountIdInput" placeholder="ACCOUNT ID">
+    <button id="saveBtn">SIMPAN</button>
+    <div class="message" id="message"></div>
+</div>
+
+</div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+    <div onclick="location.href='home.html'">Home</div>
+    <div onclick="location.href='history.html'">History</div>
+    <div onclick="location.href='wallet.html'">Wallet</div>
+    <div class="active">Mine</div>
+</div>
+
+<script>
+// LOAD DATA MINE
+const avatarPreview = document.getElementById("avatarPreview");
+const avatarInput = document.getElementById("avatarInput");
+const emailInput = document.getElementById("emailInput");
+const accountInput = document.getElementById("accountIdInput");
+const saveBtn = document.getElementById("saveBtn");
+const message = document.getElementById("message");
+
+let user = JSON.parse(localStorage.getItem("userData")) || {email:"", accountId:"", avatar:"", saldo:0};
+emailInput.value = user.email;
+accountInput.value = user.accountId;
+if(user.avatar) avatarPreview.style.backgroundImage = `url(${user.avatar})`;
+
+saveBtn.onclick = ()=>{
+    if(avatarInput.files[0]){
+        const reader = new FileReader();
+        reader.onload = function(e){
+            user.avatar = e.target.result;
+            avatarPreview.style.backgroundImage = `url(${user.avatar})`;
+            localStorage.setItem("userData", JSON.stringify(user));
+            message.textContent = "Tersimpan!";
+        }
+        reader.readAsDataURL(avatarInput.files[0]);
+    }
+    user.email = emailInput.value;
+    user.accountId = accountInput.value;
+    localStorage.setItem("userData", JSON.stringify(user));
+    message.textContent = "Tersimpan!";
+}
+</script>
+</body>
+</html>

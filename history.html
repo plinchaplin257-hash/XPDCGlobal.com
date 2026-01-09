@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>History</title>
+
+<style>
+*{box-sizing:border-box;font-family:Arial,sans-serif;margin:0;padding:0;}
+body{
+    background:url('bg.jpg') center/cover no-repeat fixed;
+    color:#fff;
+}
+
+/* OVERLAY & APP */
+.overlay{
+    min-height:100vh;
+    background:linear-gradient(rgba(0,0,0,.65),rgba(5,10,58,.9));
+    display:flex;
+    justify-content:center;
+}
+.app{
+    width:100%;
+    max-width:430px;
+    padding:20px 0 90px;
+}
+
+/* HEADER */
+.header{
+    height:56px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    background:#000;
+    z-index:10;
+}
+.header h1{
+    font-size:18px;
+    letter-spacing:1px;
+}
+
+/* CONTENT */
+.content{
+    margin-top:70px;
+}
+
+/* CARD HISTORY */
+.card{
+    background:rgba(10,43,255,.55);
+    color:#fff;
+    border-radius:16px;
+    padding:12px;
+    margin-bottom:12px;
+}
+.row{
+    display:flex;
+    font-size:14px;
+    margin-bottom:6px;
+}
+.label{
+    width:120px;
+    font-weight:bold;
+}
+.colon{
+    width:10px;
+}
+.value{
+    flex:1;
+}
+
+/* BOTTOM NAV */
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    display:flex;
+    background:#000;
+    z-index:10;
+}
+.bottom-nav div{
+    flex:1;
+    text-align:center;
+    padding:14px;
+    font-weight:bold;
+    cursor:pointer;
+}
+.bottom-nav .active{background:#1A237E}
+</style>
+</head>
+
+<body>
+<div class="overlay">
+<div class="app">
+
+<!-- HEADER -->
+<div class="header">
+    <h1>HISTORY</h1>
+</div>
+
+<!-- CONTENT -->
+<div class="content" id="historyContent">
+    <!-- Kartu transaksi akan dibuat otomatis di sini -->
+</div>
+
+</div>
+</div>
+
+<!-- NAVIGASI DENGAN PERBAIKAN -->
+<div class="bottom-nav">
+    <div onclick="location.href='home.html'">Home</div>
+    <div class="active">History</div>
+    <div onclick="location.href='wallet.html'">Wallet</div>
+    <div onclick="location.href='mine.html'">Mine</div>
+</div>
+
+<script>
+// Ambil transaksi dari localStorage (semua brand)
+let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+const historyContainer = document.getElementById("historyContent");
+
+function renderHistory(){
+    historyContainer.innerHTML = "";
+    const now = Date.now();
+
+    transactions.forEach(tx=>{
+        const card = document.createElement("div");
+        card.className = "card";
+
+        // Status: proses / sukses
+        const status = (now - tx.timestamp) < 300000 ? "proses" : "sukses"; // 5 menit
+
+        card.innerHTML = `
+            <div class="row"><div class="label">MEREK</div><div class="colon">:</div><div class="value">${tx.brand}</div></div>
+            <div class="row"><div class="label">No.PESANAN</div><div class="colon">:</div><div class="value">${tx.orderNumber}</div></div>
+            <div class="row"><div class="label">NOMINAL</div><div class="colon">:</div><div class="value">Rp.${tx.nominal.toLocaleString("id-ID")}</div></div>
+            <div class="row"><div class="label">PENGEMBALIAN</div><div class="colon">:</div><div class="value">Rp.${(tx.nominal*2).toLocaleString("id-ID")}</div></div>
+            <div class="row"><div class="label">STATUS</div><div class="colon">:</div><div class="value">${status}</div></div>
+        `;
+        historyContainer.appendChild(card);
+    });
+}
+
+// Render pertama kali
+renderHistory();
+
+// Update otomatis setiap 10 detik untuk ubah status dari proses → sukses
+setInterval(renderHistory, 10000);
+</script>
+
+</body>
+</html>

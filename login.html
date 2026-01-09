@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+
+<style>
+*{box-sizing:border-box;font-family:Arial;}
+body{
+    margin:0;
+    background:url('bg.jpg') center/cover no-repeat fixed;
+    color:#fff;
+}
+.overlay{
+    min-height:100vh;
+    background:linear-gradient(rgba(0,0,0,.65),rgba(5,10,58,.9));
+    display:flex;
+    justify-content:center;
+}
+.app{
+    width:100%;
+    max-width:430px;
+    padding:80px 20px 90px;
+    position:relative;
+}
+
+/* ORIGINAL STYLE (DIADAPTASI) */
+.logo{
+    width:70px;height:70px;border-radius:15px;
+    background:#2020FF;color:white;
+    display:flex;justify-content:center;align-items:center;
+    font-weight:bold;margin:0 auto 20px;
+    font-size:12px;text-align:center;
+}
+.lang-select{
+    position:absolute;top:20px;right:20px;
+    background:#2020FF;color:white;
+    border:none;padding:6px 12px;border-radius:6px;
+}
+.container{
+    width:100%;
+    padding:30px 20px;
+    border-radius:15px;
+    background:rgba(255,255,255,.1);
+    backdrop-filter:blur(6px);
+}
+.container input{
+    width:100%;padding:12px 15px;
+    margin:8px 0;border-radius:25px;border:none;
+    font-size:16px;
+}
+.btn{
+    width:100%;padding:12px 0;
+    border-radius:25px;border:none;
+    background:#2020FF;color:black;
+    font-size:18px;font-weight:bold;
+    margin-top:10px;
+}
+.small-links{
+    display:flex;justify-content:space-between;
+    margin-top:8px;font-size:12px;
+    color:#fff;font-weight:bold;
+}
+.cs-button{
+    position:fixed;bottom:20px;right:20px;
+    width:55px;height:55px;border-radius:50%;
+    background:white;color:black;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+<div class="overlay">
+<div class="app">
+
+<div class="logo">LOGO.PNG</div>
+
+<select class="lang-select" id="langSelect">
+    <option value="id">Indonesia</option>
+    <option value="en">English</option>
+</select>
+
+<div class="container">
+    <input id="username" placeholder="Nama Pengguna / Email / No. HP">
+    <input type="password" id="password" placeholder="Kata Sandi">
+
+    <div class="small-links">
+        <span id="registerLink">Daftar</span>
+        <span id="forgotLink">Lupa Kata Sandi</span>
+    </div>
+
+    <button class="btn" id="loginBtn">Masuk</button>
+</div>
+
+</div>
+</div>
+
+<div class="cs-button" id="csBtn">CS</div>
+
+<script>
+const textLang={
+ id:{username:"Nama Pengguna / Email / No. HP",password:"Kata Sandi",loginBtn:"Masuk",registerLink:"Daftar",forgotLink:"Lupa Kata Sandi"},
+ en:{username:"Username / Email / Phone",password:"Password",loginBtn:"Login",registerLink:"Register",forgotLink:"Forgot Password"}
+};
+
+function updateLanguage(lang){
+ username.placeholder=textLang[lang].username;
+ password.placeholder=textLang[lang].password;
+ loginBtn.innerText=textLang[lang].loginBtn;
+ registerLink.innerText=textLang[lang].registerLink;
+ forgotLink.innerText=textLang[lang].forgotLink;
+}
+langSelect.onchange=e=>updateLanguage(e.target.value);
+
+// LOGIN LOGIC
+loginBtn.onclick = ()=>{
+    const user = username.value.trim();
+    const pass = password.value;
+
+    const saved = JSON.parse(localStorage.getItem("userAccount"));
+    if(!saved){
+        alert("Akun belum terdaftar");
+        return;
+    }
+
+    if(
+        (user === saved.username || user === saved.email || user === saved.phone)
+        && pass === saved.password
+    ){
+        localStorage.setItem("isLogin","true");
+        location.href="home.html"; // AUTO KE HOME
+    }else{
+        alert("Username / Password salah");
+    }
+};
+
+registerLink.onclick=()=>location.href="register.html";
+csBtn.onclick=forgotLink.onclick=()=>window.open("https://wa.me/6285373061386");
+</script>
+
+
+</body>
+</html>

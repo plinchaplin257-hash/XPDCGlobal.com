@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Withdraw</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{box-sizing:border-box;font-family:Arial;margin:0;padding:0;}
+body{
+    background:url('bg.jpg') center/cover no-repeat fixed;
+    color:#fff;
+}
+.overlay{
+    min-height:100vh;
+    background:linear-gradient(rgba(0,0,0,.65),rgba(5,10,58,.9));
+    display:flex;
+    justify-content:center;
+}
+.app{
+    width:100%;
+    max-width:430px;
+    padding-bottom:90px;
+}
+
+/* HEADER */
+.header{
+    background:#000;
+    padding:15px;
+    text-align:center;
+    font-weight:bold;
+    font-size:20px;
+}
+
+/* FORM CARD */
+.form-card{
+    margin:15px;
+    background:#0A2BFF;
+    border-radius:20px;
+    padding:15px;
+}
+.form-card input{
+    width:100%;
+    padding:10px;
+    margin-bottom:10px;
+    border-radius:10px;
+    border:none;
+    font-weight:bold;
+}
+.form-card button{
+    width:100%;
+    padding:10px;
+    border-radius:15px;
+    font-weight:bold;
+    border:none;
+    background:#fff;
+    color:#000;
+    cursor:pointer;
+}
+.message{
+    text-align:center;
+    margin-top:10px;
+    color:#ff0;
+}
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    display:flex;
+    background:#000;
+}
+.bottom-nav div{
+    flex:1;
+    text-align:center;
+    padding:14px;
+    font-weight:bold;
+    cursor:pointer;
+}
+.bottom-nav .active{background:#1A237E;}
+</style>
+</head>
+<body>
+
+<div class="overlay">
+<div class="app">
+
+<div class="header">WITHDRAW</div>
+
+<div class="form-card">
+    <input type="number" id="withdrawAmount" placeholder="Nominal Withdraw">
+    <button id="submitBtn">SUBMIT</button>
+    <div class="message" id="message"></div>
+</div>
+
+</div>
+</div>
+
+<div class="bottom-nav">
+    <div data-target="home.html">HOME</div>
+    <div data-target="history.html">HISTORY</div>
+    <div data-target="wallet.html">WALLET</div>
+    <div data-target="mine.html">MINE</div>
+</div>
+
+<script>
+// ======= NAVIGATION =======
+document.querySelectorAll(".bottom-nav div").forEach(btn=>{
+    btn.onclick = function(){
+        const target = btn.getAttribute("data-target");
+        if(target) location.href = target;
+    }
+});
+
+// ======= LOAD USER DATA =======
+let user = JSON.parse(localStorage.getItem("userData")) || {email:"", accountId:"", avatar:"", saldo:0};
+const messageEl = document.getElementById("message");
+const withdrawInput = document.getElementById("withdrawAmount");
+
+// ======= SUBMIT WITHDRAW =======
+document.getElementById("submitBtn").onclick = function(){
+    let amount = parseInt(withdrawInput.value);
+    if(isNaN(amount) || amount <= 0){
+        messageEl.textContent = "Masukkan nominal yang valid!";
+        return;
+    }
+    if(amount > user.saldo){
+        messageEl.textContent = "Saldo tidak cukup!";
+        return;
+    }
+
+    // Kurangi saldo
+    user.saldo -= amount;
+    localStorage.setItem("userData", JSON.stringify(user));
+
+    // Tambahkan transaksi
+    let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+    transactions.push({
+        jenis: "Withdraw",
+        noPesanan: Date.now(),
+        nominal: amount,
+        tanggal: new Date().toLocaleString(),
+        status: "Berhasil"
+    });
+    localStorage.setItem("transactions", JSON.stringify(transactions));
+
+    messageEl.textContent = "Withdraw berhasil!";
+    withdrawInput.value = "";
+
+    // Opsional: redirect ke wallet setelah 1 detik
+    setTimeout(()=>{ location.href="wallet.html"; }, 1000);
+}
+</script>
+
+</body>
+</html>

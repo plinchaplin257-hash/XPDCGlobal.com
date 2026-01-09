@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home - Realtime History</title>
+
+<style>
+*{box-sizing:border-box;font-family:Arial;margin:0;padding:0;}
+body{
+    background:url('bg.jpg') center/cover no-repeat fixed;
+    color:#fff;
+}
+
+/* OVERLAY & APP */
+.overlay{
+    min-height:100vh;
+    background:linear-gradient(rgba(0,0,0,.65),rgba(5,10,58,.9));
+    display:flex;
+    justify-content:center;
+}
+.app{
+    width:100%;
+    max-width:430px;
+    padding-bottom:90px;
+}
+
+/* HEADER */
+.header{
+    display:flex;
+    justify-content:space-between;
+    padding:15px;
+}
+.badge{
+    background:#0A2BFF;
+    padding:8px 16px;
+    border-radius:20px;
+    font-weight:bold;
+}
+
+/* HISTORY */
+.info{
+    margin:15px;
+}
+.history-wrapper {
+    height: 30px;
+    overflow: hidden;
+    position: relative;
+    border-radius:6px;
+}
+.history-list {
+    list-style: none;
+    position: absolute;
+    top: 0;
+    width:100%;
+}
+.history-list li {
+    height: 30px;
+    line-height: 30px;
+    padding-left: 10px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 6px;
+    margin-bottom: 2px;
+    white-space: nowrap;
+}
+
+/* SLIDER - RESPONSIF */
+.slider {
+    margin: 15px;
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,.5);
+    width: 93%;
+    aspect-ratio: 15 / 9; /* rasio frame */
+    position: relative;
+}
+
+.slider-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    animation: slide 12s infinite;
+}
+
+.slide {
+    flex-shrink: 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.slide img {
+    width: 100%;
+    height: 120%;
+    object-fit: cover; 
+    display: block;
+}
+
+@keyframes slide {
+    0%, 33% { transform: translateX(0); }
+    38%, 66% { transform: translateX(-100%); }
+    71%, 100% { transform: translateX(-200%); }
+}
+
+/* BRAND */
+.brand{
+    background:#050A3A;
+    margin:15px;
+    padding:20px;
+    border-radius:26px;
+    display:flex;
+    gap:10px;
+}
+.brand-left div{
+    background:#0A2BFF;
+    margin-bottom:10px;
+    padding:8px;
+    border-radius:20px;
+    text-align:center;
+    font-weight:bold;
+    cursor:pointer;
+}
+.preview{
+    background:linear-gradient(135deg,#0A2BFF,#091C8B);
+    border-radius:18px;
+    width:100%;
+    padding:15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+/* ABOUT */
+.about{
+    margin:15px;
+    padding:22px;
+    background:rgba(10,43,255,.55);
+    border-radius:26px;
+    text-align:center;
+}
+
+/* ACTION */
+.actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+    margin:20px 15px;
+}
+.action-btn{
+    background:#000;
+    padding:14px;
+    border-radius:30px;
+    text-align:center;
+    font-weight:bold;
+}
+
+/* BLUE */
+.blue-section{
+    background:#0A2BFF;
+    padding:25px 15px;
+}
+.blue-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px 40px;
+    font-weight:bold;
+    color:#000;
+}
+
+/* PARTNER */
+.partners{
+    text-align:center;
+    margin-top:25px;
+}
+.partner-list{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+.partner-list img{
+    background:#fff;
+    padding:6px 10px;
+    border-radius:14px;
+    width:70px;
+}
+
+/* NAV */
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    display:flex;
+    background:#000;
+}
+.bottom-nav div{
+    flex:1;
+    text-align:center;
+    padding:14px;
+    font-weight:bold;
+    cursor:pointer;
+}
+.bottom-nav .active{background:#1A237E}
+
+/* CS */
+.cs{
+    position:fixed;
+    right:20px;
+    bottom:80px;
+    width:60px;
+    height:60px;
+    background:#fff;
+    color:#000;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay">
+<div class="app">
+
+<!-- HEADER -->
+<div class="header">
+    <img src="logo.png" style="height:90px">
+    <div class="userId">ID : 40135512</div>
+</div>
+
+<!-- HISTORY -->
+<div class="info">
+    <div class="history-wrapper">
+        <ul class="history-list" id="historyList">
+            <li></li><li></li><li></li><li></li>
+        </ul>
+    </div>
+</div>
+
+<!-- SLIDER -->
+<div class="slider">
+    <div class="slider-track">
+        <div class="slide"><img src="slide1.jpg"></div>
+        <div class="slide"><img src="slide2.jpg"></div>
+        <div class="slide"><img src="slide3.jpg"></div>
+    </div>
+</div>
+
+<!-- BRAND -->
+<div class="brand">
+    <div class="brand-left">
+        <div onclick="location.href='channel.html'">Channel</div>
+        <div onclick="location.href='dior.html'">Dior</div>
+        <div onclick="location.href='lv.html'">Louis Vuitton</div>
+        <div onclick="location.href='gucci.html'">Gucci</div>
+    </div>
+    <div class="preview">PREVIEW BRAND</div>
+</div>
+
+<!-- ABOUT -->
+<div class="about">
+    <h2>About us</h2>
+    <p>Disini aku akan membuat Deskripsi tentang perusahaan</p>
+</div>
+
+<!-- ACTION -->
+<div class="actions">
+    <div class="action-btn">Deposit</div>
+    <div class="action-btn">Withdraw</div>
+    <div class="action-btn">Settings</div>
+    <div class="action-btn">Customer Service</div>
+</div>
+
+<!-- BLUE -->
+<div class="blue-section">
+    <div class="blue-grid">
+        <div>Event</div><div>Verification</div>
+        <div>Promotions</div><div>Security</div>
+        <div>Contact us</div><div>Certification</div>
+    </div>
+
+    <div class="partners">
+        <h3>Partners</h3>
+        <div class="partner-list">
+            <img src="partner1.jpg">
+            <img src="partner2.jpg">
+            <img src="partner3.jpg">
+            <img src="partner4.jpg">
+            <img src="partner5.jpg">
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+
+<div class="cs" onclick="window.open('https://wa.me/6285373061386')">CS</div>
+
+<div class="bottom-nav">
+    <div data-target="home.html" class="active">Home</div>
+    <div data-target="history.html">History</div>
+    <div data-target="wallet.html">Wallet</div>
+    <div data-target="mine.html">Mine</div>
+</div>
+
+<script>
+if(localStorage.getItem("isLogin")!=="true"){
+    location.href="login.html";
+}
+
+// ===== HISTORY ANIMASI =====
+const historyList=document.getElementById("historyList");
+const f=["De","Jo","Mi","Sa","An","Lu","Ra","Ti","Ka","Be"];
+const l=["85","12","90","77","33","56","21","44","68","99"];
+function item(){
+    return f[Math.random()*10|0]+"***"+l[Math.random()*10|0]+" Berhasil melakukan penarikan Rp"+(Math.random()*99000000+1000000|0).toLocaleString("id-ID");
+}
+function scroll(){
+    const first=historyList.firstElementChild;
+    const h=first.offsetHeight+2;
+    historyList.style.transition="transform .5s linear";
+    historyList.style.transform=`translateY(-${h}px)`;
+    setTimeout(()=>{
+        historyList.style.transition="none";
+        historyList.style.transform="translateY(0)";
+        first.textContent=item();
+        historyList.appendChild(first);
+    },500);
+}
+setInterval(scroll,2000);
+historyList.querySelectorAll("li").forEach(li=>li.textContent=item());
+
+// ===== NAVIGASI BAWAH =====
+document.querySelectorAll(".bottom-nav div").forEach(btn=>{
+    btn.onclick = function(){
+        const target = btn.getAttribute("data-target");
+        if(target) location.href = target;
+    }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register</title>
+
+<style>
+*{box-sizing:border-box;font-family:Arial;}
+body{
+    margin:0;
+    background:url('bg.jpg') center/cover no-repeat fixed;
+    color:#fff;
+}
+.overlay{
+    min-height:100vh;
+    background:linear-gradient(rgba(0,0,0,.65),rgba(5,10,58,.9));
+    display:flex;
+    justify-content:center;
+}
+.app{
+    width:100%;
+    max-width:430px;
+    padding:80px 20px 90px;
+    position:relative;
+}
+
+/* ORIGINAL STYLE */
+.logo{
+    width:70px;height:70px;border-radius:15px;
+    background:#2020FF;color:white;
+    display:flex;justify-content:center;align-items:center;
+    font-weight:bold;margin:0 auto 20px;
+}
+.lang-select{
+    position:absolute;top:20px;right:20px;
+    background:#2020FF;color:white;
+    border:none;padding:6px 12px;border-radius:6px;
+}
+.container{
+    padding:30px 20px;
+    border-radius:15px;
+    background:rgba(255,255,255,.1);
+    backdrop-filter:blur(6px);
+}
+.toggle-method{
+    display:flex;gap:10px;margin-bottom:10px;
+}
+.toggle-method button{
+    flex:1;padding:10px;border-radius:25px;
+    border:none;font-weight:bold;color:white;
+}
+.active{background:#2020FF;}
+.inactive{background:#3A3A8C;}
+.container input{
+    width:100%;padding:12px 15px;
+    margin:8px 0;border-radius:25px;border:none;
+}
+.btn{
+    width:100%;padding:12px;border-radius:25px;
+    background:#2020FF;color:black;
+    font-size:18px;font-weight:bold;
+}
+.small-links{
+    display:flex;justify-content:space-between;
+    font-size:12px;margin-top:8px;
+}
+.cs-button{
+    position:fixed;bottom:20px;right:20px;
+    width:55px;height:55px;border-radius:50%;
+    background:white;color:black;
+    display:flex;align-items:center;justify-content:center;
+}
+</style>
+</head>
+
+<body>
+<div class="overlay">
+<div class="app">
+
+<div class="logo">LOGO.PNG</div>
+
+<select class="lang-select" id="langSelect">
+<option value="id">Indonesia</option>
+<option value="en">English</option>
+</select>
+
+<div class="container">
+    <div class="toggle-method">
+        <button id="emailBtn" class="active" onclick="toggleMethod('email')">Email</button>
+        <button id="phoneBtn" class="inactive" onclick="toggleMethod('phone')">No. Hp</button>
+    </div>
+
+    <input id="username" placeholder="Nama Pengguna">
+    <input id="emailField" placeholder="Email">
+    <input id="phoneField" placeholder="No. Hp" style="display:none">
+    <input type="password" id="password" placeholder="Kata Sandi">
+    <input type="password" id="confirm" placeholder="Konfirmasi Kata Sandi">
+
+    <div class="small-links">
+        <span onclick="location.href='login.html'">Login</span>
+        <span onclick="window.open('https://wa.me/6285373061386')">Lupa Kata Sandi</span>
+    </div>
+
+    <button class="btn">Daftar</button>
+</div>
+
+</div>
+</div>
+
+<div class="cs-button">CS</div>
+
+<script>
+let registerMethod = "email";
+
+function toggleMethod(m){
+    registerMethod = m;
+
+    document.getElementById("emailField").style.display =
+        m === "email" ? "block" : "none";
+    document.getElementById("phoneField").style.display =
+        m === "phone" ? "block" : "none";
+
+    document.getElementById("emailBtn").className =
+        m === "email" ? "active" : "inactive";
+    document.getElementById("phoneBtn").className =
+        m === "phone" ? "active" : "inactive";
+}
+
+document.querySelector(".btn").onclick = function(){
+    const user = document.getElementById("username").value.trim();
+    const email = document.getElementById("emailField").value.trim();
+    const phone = document.getElementById("phoneField").value.trim();
+    const pass = document.getElementById("password").value;
+    const conf = document.getElementById("confirm").value;
+
+    if(!user){
+        alert("Nama pengguna wajib diisi");
+        return;
+    }
+
+    if(registerMethod === "email" && !email){
+        alert("Email wajib diisi");
+        return;
+    }
+
+    if(registerMethod === "phone" && !phone){
+        alert("No. HP wajib diisi");
+        return;
+    }
+
+    if(!pass || !conf){
+        alert("Password wajib diisi");
+        return;
+    }
+
+    if(pass !== conf){
+        alert("Konfirmasi password tidak sama");
+        return;
+    }
+
+    const data = {
+        username: user,
+        email: registerMethod === "email" ? email : "",
+        phone: registerMethod === "phone" ? phone : "",
+        password: pass,
+        method: registerMethod
+    };
+
+    localStorage.setItem("userAccount", JSON.stringify(data));
+
+    alert("Registrasi berhasil");
+    location.href = "login.html";
+};
+</script>
+
+
+
+</body>
+</html>
